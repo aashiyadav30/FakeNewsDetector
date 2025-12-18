@@ -1,0 +1,34 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String      @id @default(uuid())
+  email     String      @unique
+  password  String
+  createdAt DateTime    @default(now())
+
+  history   NewsCheck[]
+}
+
+model NewsCheck {
+  id          String   @id @default(uuid())
+  content     String
+  verdict     Verdict
+  confidence  Float
+  explanation String?
+  createdAt   DateTime @default(now())
+
+  userId      String?
+  user        User?    @relation(fields: [userId], references: [id])
+}
+
+enum Verdict {
+  REAL
+  FAKE
+}
