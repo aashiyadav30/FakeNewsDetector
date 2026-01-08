@@ -7,7 +7,7 @@ export const getHistory = async (_req: Request, res: Response) => {
       orderBy: {
         createdAt: "desc",
       },
-      take: 10, // latest 10 results
+      take: 100, // latest 100 results
     });
 
     return res.json(history);

@@ -9,8 +9,8 @@ const History = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#F7F5EF] p-6">
-      <h1 className="text-2xl font-semibold mb-6 text-[#2F4F4F]">
+    <div className="min-h-screen bg-[#F1EEDC] p-6">
+      <h1 className="text-2xl font-semibold mb-6 text-[#2F4F4F] align-center">
         Detection History
       </h1>
 
@@ -41,3 +41,6 @@ const History = () => {
 };
 
 export default History;
+
+
+

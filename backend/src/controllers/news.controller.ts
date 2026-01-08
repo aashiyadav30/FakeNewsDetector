@@ -1,9 +1,10 @@
 import { Request, Response } from "express";
 import { fetchLatestNews } from "../services/news.service";
 
-export const getLatestNews = async (_req: Request, res: Response) => {
+export const getLatestNews = async (req: Request, res: Response) => {
   try {
-    const news = await fetchLatestNews();
+    const category = typeof req.query.category === "string" ? req.query.category : undefined;
+    const news = await fetchLatestNews(category);
     return res.json(news);
   } catch (error) {
     console.error(error);

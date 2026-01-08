@@ -1,5 +1,6 @@
 import axios from "axios";
 import { Request, Response } from "express";
+import { prisma } from "../utils/prisma";
 
 const ML_API_URL = "http://localhost:5001/predict";
 
@@ -37,18 +38,38 @@ export const detectNews = async (req: Request, res: Response) => {
       textLower.includes(keyword)
     );
 
-    // 🔥 FINAL DECISION LOGIC
+    // FINAL DECISION LOGIC
     if (confidence < 0.75) {
       verdict = hasRedFlags ? "FAKE" : "UNCERTAIN";
+    }
+
+    // Map verdict to the DB enum (Prisma currently supports only REAL/FAKE)
+    const verdictToStore =
+      verdict === "UNCERTAIN" ? (hasRedFlags ? "FAKE" : "REAL") : verdict;
+
+    const explanation =
+      verdict === "UNCERTAIN"
+        ? "The content is ambiguous. Please verify with trusted sources."
+        : undefined;
+
+    // Persist the check to the database
+    try {
+      await prisma.newsCheck.create({
+        data: {
+          content,
+          verdict: verdictToStore as any,
+          confidence: Number(confidence),
+          explanation,
+        },
+      });
+    } catch (dbErr) {
+      console.error("Failed to save news check:", dbErr);
     }
 
     return res.json({
       verdict,
       confidence,
-      reason:
-        verdict === "UNCERTAIN"
-          ? "The content is ambiguous. Please verify with trusted sources."
-          : undefined
+      reason: explanation,
     });
 
   } catch (error) {

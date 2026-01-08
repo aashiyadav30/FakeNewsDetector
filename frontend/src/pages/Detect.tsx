@@ -23,7 +23,7 @@ const Detect = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#F7F5EF] flex items-center justify-center p-6">
+    <div className="min-h-screen bg-[#F1EEDC] flex items-center justify-center p-6">
       <div className="w-full max-w-xl bg-white rounded-xl shadow p-6">
         <h1 className="text-2xl font-semibold text-[#2F4F4F] mb-4">
           Fake News Detector
